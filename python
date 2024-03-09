@@ -1,0 +1,35 @@
+# Import the Flask module
+from flask import Flask, render_template
+
+# Create an instance of the Flask class
+app = Flask(__name__)
+
+# Define a list of animals and their attributes
+animals = [
+    {"name": "Lion", "image": "lion.jpg", "sound": "roar", "description": "The king of the jungle"},
+    {"name": "Elephant", "image": "elephant.jpg", "sound": "trumpet", "description": "The largest land animal"},
+    {"name": "Penguin", "image": "penguin.jpg", "sound": "squawk", "description": "A flightless bird that lives in cold regions"},
+    {"name": "Giraffe", "image": "giraffe.jpg", "sound": "hum", "description": "The tallest living animal with a long neck"}
+]
+
+# Define a route for the home page
+@app.route("/")
+def home():
+    # Render the home.html template and pass the animals list
+    return render_template("home.html", animals=animals)
+
+# Define a route for the animal page
+@app.route("/animal/<name>")
+def animal(name):
+    # Find the animal with the matching name in the list
+    animal = next((a for a in animals if a["name"] == name), None)
+    # If the animal is found, render the animal.html template and pass the animal
+    if animal:
+        return render_template("animal.html", animal=animal)
+    # Otherwise, return a 404 error
+    else:
+        return "Animal not found", 404
+
+# Run the app in debug mode
+if __name__ == "__main__":
+    app.run(debug=True)
